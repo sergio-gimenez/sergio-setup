@@ -5,6 +5,7 @@ Personal workstation bootstrap scripts.
 ## What it installs
 
 - `keyd` with `Caps Lock` remapped to `Escape` for all keyboards
+- `gpaste-2` clipboard history manager with `Super+C` keybinding
 - Neovim config from `https://github.com/sergio-gimenez/lazyvim-config`
 
 ## Usage
@@ -20,6 +21,7 @@ Run individual parts:
 ```bash
 ./scripts/install-keyd.sh
 ./scripts/install-lazyvim.sh
+./scripts/install-gpaste.sh
 ```
 
 ## Notes
