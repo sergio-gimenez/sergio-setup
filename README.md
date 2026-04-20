@@ -9,6 +9,7 @@ Personal workstation bootstrap scripts.
 - English user directories (`Desktop`, `Downloads`, etc.)
 - `gpaste-2` clipboard history manager with `Super+C` keybinding
 - Neovim config from `https://github.com/sergio-gimenez/lazyvim-config`
+- Ghostty terminal emulator built from source
 
 ## Usage
 
@@ -26,6 +27,7 @@ Run individual parts:
 ./scripts/install-user-dirs.sh
 ./scripts/install-lazyvim.sh
 ./scripts/install-gpaste.sh
+./scripts/install-ghostty.sh
 ```
 
 ## Notes
