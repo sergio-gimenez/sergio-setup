@@ -11,5 +11,7 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 "$ROOT_DIR/scripts/install-flameshot.sh"
 "$ROOT_DIR/scripts/install-zsh.sh"
 "$ROOT_DIR/scripts/install-ghostty.sh"
+"$ROOT_DIR/scripts/install-syncthing.sh"
+"$ROOT_DIR/scripts/install-logseq.sh"
 
 printf 'Setup complete.\n'
