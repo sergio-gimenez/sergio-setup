@@ -8,6 +8,8 @@ Personal workstation bootstrap scripts.
 - Spanish (Catalan ·) keyboard layout via `localectl`
 - English user directories (`Desktop`, `Downloads`, etc.)
 - `gpaste-2` clipboard history manager with `Super+C` keybinding
+- `flameshot` with `Print Screen` keybinding (replaces GNOME default screenshot shortcut)
+- `zsh` with Oh-My-Zsh, `fzf`, `zsh-autosuggestions`, `zsh-syntax-highlighting`, and `autoswitch_virtualenv`
 - Neovim config from `https://github.com/sergio-gimenez/lazyvim-config`
 - Ghostty terminal emulator built from source
 
@@ -27,6 +29,8 @@ Run individual parts:
 ./scripts/install-user-dirs.sh
 ./scripts/install-lazyvim.sh
 ./scripts/install-gpaste.sh
+./scripts/install-flameshot.sh
+./scripts/install-zsh.sh
 ./scripts/install-ghostty.sh
 ```
 
@@ -38,3 +42,5 @@ Run individual parts:
 - `install-lazyvim.sh` installs the config in `~/.config/nvim`.
 - `install-lazyvim.sh` installs `git` and `neovim` if they are missing.
 - If `~/.config/nvim` already exists and is not a git checkout, it is moved to a timestamped backup.
+- `install-flameshot.sh` disables GNOME's default Print Screen shortcut and binds it to `flameshot gui`.
+- `install-zsh.sh` installs Oh-My-Zsh and plugins, copies the `.zshrc` from `dotfiles/.zshrc`, and changes the default shell to zsh.

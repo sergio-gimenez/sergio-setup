@@ -8,6 +8,8 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 "$ROOT_DIR/scripts/install-user-dirs.sh"
 "$ROOT_DIR/scripts/install-lazyvim.sh"
 "$ROOT_DIR/scripts/install-gpaste.sh"
+"$ROOT_DIR/scripts/install-flameshot.sh"
+"$ROOT_DIR/scripts/install-zsh.sh"
 "$ROOT_DIR/scripts/install-ghostty.sh"
 
 printf 'Setup complete.\n'
