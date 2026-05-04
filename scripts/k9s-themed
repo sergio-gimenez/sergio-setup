@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# k9s wrapper that auto-selects light/dark skin based on GNOME theme
+
+current=$(gsettings get org.gnome.desktop.interface color-scheme)
+
+if [ "$current" = "'prefer-dark'" ]; then
+    export K9S_SKIN="tokyonight-night"
+else
+    export K9S_SKIN="tokyonight-day"
+fi
+
+exec /usr/bin/k9s "$@"

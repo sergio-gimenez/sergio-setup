@@ -1,0 +1,24 @@
+# Remap Ctrl+Tab and Ctrl+Shift+Tab to switch between splits (panes)
+keybind = ctrl+tab=goto_split:next
+keybind = ctrl+shift+tab=goto_split:previous
+
+# Remap Ctrl+PageUp and Ctrl+PageDown to cycle between tabs
+keybind = ctrl+page_up=previous_tab
+keybind = ctrl+page_down=next_tab
+
+# Resize split
+keybind = ctrl+shift+left=resize_split:left,10
+keybind = ctrl+shift+down=resize_split:down,10
+keybind = ctrl+shift+up=resize_split:up,10
+keybind = ctrl+shift+right=resize_split:right,10
+keybind = ctrl+shift+plus=equalize_splits
+keybind = ctrl+shift+x=toggle_split_zoom
+keybind = ctrl+shift+,=reload_config
+
+# Auto-switch theme based on GNOME light/dark mode
+# Using tokyonight variants to match LazyVim's default aesthetic.
+theme = light:tokyonight-day,dark:tokyonight_night
+
+font-family = "JetBrainsMono Nerd Font"
+font-size = 11
+gtk-titlebar-hide-when-maximized = true
