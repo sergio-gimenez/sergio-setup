@@ -6,12 +6,14 @@ ZSHRC_SOURCE="$ROOT_DIR/dotfiles/.zshrc-remote"
 ZSHRC_TARGET="$HOME/.zshrc"
 ZSHRC_BACKUP="$HOME/.zshrc.backup.$(date +%Y%m%d%H%M%S)"
 
-if [ -e "$ZSHRC_TARGET" ] && [ ! -L "$ZSHRC_TARGET" ]; then
+if [ -e "$ZSHRC_TARGET" ] && [ ! -L "$ZSHRC_TARGET" ] && ! cmp -s "$ZSHRC_SOURCE" "$ZSHRC_TARGET"; then
     cp "$ZSHRC_TARGET" "$ZSHRC_BACKUP"
     printf 'Backed up existing .zshrc to %s\n' "$ZSHRC_BACKUP"
 fi
 
-cp "$ZSHRC_SOURCE" "$ZSHRC_TARGET"
+if [ ! -e "$ZSHRC_TARGET" ] || [ -L "$ZSHRC_TARGET" ] || ! cmp -s "$ZSHRC_SOURCE" "$ZSHRC_TARGET"; then
+    cp "$ZSHRC_SOURCE" "$ZSHRC_TARGET"
+fi
 
 CURRENT_SHELL="$(getent passwd "$USER" | cut -d: -f7 2>/dev/null || true)"
 TARGET_SHELL="$(command -v zsh)"

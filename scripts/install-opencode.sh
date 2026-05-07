@@ -8,7 +8,7 @@ OPENCODE_CONFIG_DIR="$HOME/.config/opencode"
 
 mkdir -p "$INSTALL_DIR"
 
-if ! command -v opencode >/dev/null 2>&1; then
+if [ ! -x "$INSTALL_DIR/opencode" ] && [ ! -x "$FALLBACK_DIR/opencode" ]; then
     env OPENCODE_INSTALL_DIR="$INSTALL_DIR" XDG_BIN_DIR="$INSTALL_DIR" bash -c "$(curl -fsSL https://opencode.ai/install)"
 fi
 

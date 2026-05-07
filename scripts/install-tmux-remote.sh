@@ -6,11 +6,13 @@ TMUX_CONF_SOURCE="$ROOT_DIR/dotfiles/.tmux.conf-remote"
 TMUX_CONF_TARGET="$HOME/.tmux.conf"
 TMUX_CONF_BACKUP="$HOME/.tmux.conf.backup.$(date +%Y%m%d%H%M%S)"
 
-if [ -e "$TMUX_CONF_TARGET" ] && [ ! -L "$TMUX_CONF_TARGET" ]; then
+if [ -e "$TMUX_CONF_TARGET" ] && [ ! -L "$TMUX_CONF_TARGET" ] && ! cmp -s "$TMUX_CONF_SOURCE" "$TMUX_CONF_TARGET"; then
     cp "$TMUX_CONF_TARGET" "$TMUX_CONF_BACKUP"
     printf 'Backed up existing .tmux.conf to %s\n' "$TMUX_CONF_BACKUP"
 fi
 
-cp "$TMUX_CONF_SOURCE" "$TMUX_CONF_TARGET"
+if [ ! -e "$TMUX_CONF_TARGET" ] || [ -L "$TMUX_CONF_TARGET" ] || ! cmp -s "$TMUX_CONF_SOURCE" "$TMUX_CONF_TARGET"; then
+    cp "$TMUX_CONF_SOURCE" "$TMUX_CONF_TARGET"
+fi
 
 printf 'Remote tmux config installed at %s\n' "$TMUX_CONF_TARGET"
