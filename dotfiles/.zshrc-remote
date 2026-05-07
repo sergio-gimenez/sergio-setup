@@ -43,7 +43,7 @@ alias tls='tmux ls'
 export EDITOR='nvim'
 
 # PATH additions
-export PATH="$HOME/.cargo/bin:$HOME/.local/bin:$PATH"
+export PATH="$HOME/.cargo/bin:$HOME/.local/bin:$HOME/.opencode/bin:$PATH"
 
 # FZF
 if [ -f /usr/share/doc/fzf/examples/key-bindings.zsh ]; then

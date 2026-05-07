@@ -23,6 +23,12 @@ Run the full setup:
 ./install.sh
 ```
 
+Run headless remote setup:
+
+```bash
+./install-headless.sh
+```
+
 Run individual parts:
 
 ```bash
@@ -36,7 +42,11 @@ Run individual parts:
 ./scripts/install-ghostty.sh
 ./scripts/install-syncthing.sh
 ./scripts/install-logseq.sh
+./scripts/install-opencode.sh
+./scripts/setup-remote-minimal.sh
 ```
+
+`install-headless.sh` installs headless remote dev tools only: `zsh`, `tmux`, LazyVim, OpenCode, `mosh`, and CLI dependencies. It skips GUI, desktop, and hardware-specific setup.
 
 ## Notes
 

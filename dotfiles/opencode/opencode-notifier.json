@@ -1,0 +1,38 @@
+{
+  "notification": true,
+  "sound": false,
+  "bell": false,
+  "suppressWhenFocused": false,
+  "showProjectName": true,
+  "showSessionTitle": false,
+  "enableOnDesktop": false,
+  "linux": {
+    "grouping": true
+  },
+  "events": {
+    "permission": {
+      "notification": true,
+      "sound": false,
+      "command": false,
+      "bell": false
+    },
+    "complete": {
+      "notification": true,
+      "sound": false,
+      "command": false,
+      "bell": false
+    },
+    "question": {
+      "notification": true,
+      "sound": false,
+      "command": false,
+      "bell": false
+    },
+    "error": {
+      "notification": true,
+      "sound": false,
+      "command": false,
+      "bell": false
+    }
+  }
+}
