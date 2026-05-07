@@ -7,7 +7,7 @@ TARGET_USER="${HEADLESS_USER:-$(stat -c '%U' "$ROOT_DIR")}"
 "$ROOT_DIR/scripts/install-headless-packages.sh"
 
 if [ "$(id -u)" -eq 0 ] && [ "$TARGET_USER" != "root" ]; then
-    sudo -H -u "$TARGET_USER" bash -lc "'$ROOT_DIR/scripts/install-zsh-remote.sh' && '$ROOT_DIR/scripts/install-lazyvim.sh' && '$ROOT_DIR/scripts/install-tmux-remote.sh' && '$ROOT_DIR/scripts/install-opencode.sh'"
+    runuser -u "$TARGET_USER" -- bash -lc "'$ROOT_DIR/scripts/install-zsh-remote.sh' && '$ROOT_DIR/scripts/install-lazyvim.sh' && '$ROOT_DIR/scripts/install-tmux-remote.sh' && '$ROOT_DIR/scripts/install-opencode.sh'"
 else
     "$ROOT_DIR/scripts/install-zsh-remote.sh"
     "$ROOT_DIR/scripts/install-lazyvim.sh"
