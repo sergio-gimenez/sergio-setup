@@ -1,17 +1,21 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_URL="https://github.com/sergio-gimenez/lazyvim-config"
 TARGET_DIR="$HOME/.config/nvim"
 BACKUP_DIR="$HOME/.config/nvim.backup.$(date +%Y%m%d%H%M%S)"
 ALT_REPO_URL="git@github.com:sergio-gimenez/lazyvim-config.git"
 
+# Prefer pkexec in local desktop sessions. Fall back to sudo for SSH/headless runs.
+source "$SCRIPT_DIR/lib/run-as-root.sh"
+
 if ! command -v git >/dev/null 2>&1; then
-    pkexec apt install -y git
+    run_as_root apt install -y git
 fi
 
 if ! command -v nvim >/dev/null 2>&1; then
-    pkexec apt install -y neovim
+    run_as_root apt install -y neovim
 fi
 
 mkdir -p "$HOME/.config"

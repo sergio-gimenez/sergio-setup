@@ -4,7 +4,10 @@ set -euo pipefail
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
-pkexec localectl set-x11-keymap es pc105 cat
+# Prefer pkexec in local desktop sessions. Fall back to sudo for SSH/headless runs.
+source "$ROOT_DIR/scripts/lib/run-as-root.sh"
+
+run_as_root localectl set-x11-keymap es pc105 cat
 printf 'Keyboard layout set to Spanish (Catalan ·)\n'
 
 # Install dark-mode toggle script
