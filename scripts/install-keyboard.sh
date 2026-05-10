@@ -7,8 +7,14 @@ ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 # Prefer pkexec in local desktop sessions. Fall back to sudo for SSH/headless runs.
 source "$ROOT_DIR/scripts/lib/run-as-root.sh"
 
-run_as_root localectl set-x11-keymap es pc105 cat
-printf 'Keyboard layout set to Spanish (Catalan ·)\n'
+if localectl status 2>/dev/null | grep -Fq 'X11 Layout: es' \
+    && localectl status 2>/dev/null | grep -Fq 'X11 Model: pc105' \
+    && localectl status 2>/dev/null | grep -Fq 'X11 Variant: cat'; then
+    printf 'Keyboard layout already set to Spanish (Catalan ·)\n'
+else
+    run_as_root localectl set-x11-keymap es pc105 cat
+    printf 'Keyboard layout set to Spanish (Catalan ·)\n'
+fi
 
 # Install dark-mode toggle script
 mkdir -p "$HOME/.local/bin"
