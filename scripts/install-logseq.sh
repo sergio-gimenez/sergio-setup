@@ -7,6 +7,32 @@ LOGSEQ_GRAPH_REPO_URL="${LOGSEQ_GRAPH_REPO_URL:-ssh://git@git.home.sergiogimenez
 LOGSEQ_CONFIG_DIR="$LOGSEQ_GRAPH_DIR/.logseq/config"
 TIMESTAMP="$(date +%Y%m%d%H%M%S)"
 
+ensure_known_host() {
+    local repo_url="$1"
+    local host
+
+    case "$repo_url" in
+        ssh://*@*/*)
+            host="${repo_url#ssh://*@}"
+            host="${host%%/*}"
+            ;;
+        *@*:*)
+            host="${repo_url#*@}"
+            host="${host%%:*}"
+            ;;
+        *)
+            return
+            ;;
+    esac
+
+    mkdir -p "$HOME/.ssh"
+    chmod 700 "$HOME/.ssh"
+
+    if ! ssh-keygen -F "$host" >/dev/null 2>&1; then
+        ssh-keyscan -H "$host" >> "$HOME/.ssh/known_hosts" 2>/dev/null || true
+    fi
+}
+
 backup_file() {
     local target="$1"
 
@@ -22,9 +48,19 @@ if [ ! -d "$LOGSEQ_GRAPH_DIR/.git" ]; then
         exit 1
     fi
 
-    git clone "$LOGSEQ_GRAPH_REPO_URL" "$LOGSEQ_GRAPH_DIR"
+    ensure_known_host "$LOGSEQ_GRAPH_REPO_URL"
+
+    if ! git clone "$LOGSEQ_GRAPH_REPO_URL" "$LOGSEQ_GRAPH_DIR"; then
+        printf 'Skipped Logseq graph clone. Check SSH key access for %s\n' "$LOGSEQ_GRAPH_REPO_URL" >&2
+        exit 0
+    fi
 elif [ -z "$(git -C "$LOGSEQ_GRAPH_DIR" status --porcelain)" ]; then
-    git -C "$LOGSEQ_GRAPH_DIR" pull --ff-only
+    ensure_known_host "$LOGSEQ_GRAPH_REPO_URL"
+
+    if ! git -C "$LOGSEQ_GRAPH_DIR" pull --ff-only; then
+        printf 'Skipped updating %s. Check SSH key access for %s\n' "$LOGSEQ_GRAPH_DIR" "$LOGSEQ_GRAPH_REPO_URL" >&2
+        exit 0
+    fi
 else
     printf 'Skipped pulling %s because it has local changes.\n' "$LOGSEQ_GRAPH_DIR"
 fi

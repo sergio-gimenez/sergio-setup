@@ -1,7 +1,12 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+if [ ! -d "$HOME/.agents/skills/caveman" ]; then
+  printf 'Skipped caveman skill install. Source skills missing in ~/.agents/skills\n'
+  exit 0
+fi
 
 mkdir -p "$ROOT_DIR/.agents/skills"
 
