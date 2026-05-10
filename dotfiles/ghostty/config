@@ -17,7 +17,7 @@ keybind = ctrl+shift+,=reload_config
 
 # Auto-switch theme based on GNOME light/dark mode
 # Using tokyonight variants to match LazyVim's default aesthetic.
-theme = light:tokyonight-day,dark:tokyonight_night
+theme = light:TokyoNight Day,dark:TokyoNight Night
 
 font-family = "JetBrainsMono Nerd Font"
 font-size = 11
