@@ -2,12 +2,16 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+source "$ROOT_DIR/scripts/lib/run-as-root.sh"
 
 # Install k9s
 if ! command -v k9s &> /dev/null; then
     printf 'k9s not found. Installing...\n'
     if command -v apt-get &> /dev/null; then
-        sudo apt-get update && sudo apt-get install -y k9s
+        run_as_root apt-get update
+        run_as_root apt-get install -y k9s
     else
         printf 'ERROR: No supported package manager found. Please install k9s manually.\n'
         exit 1

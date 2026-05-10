@@ -1,8 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+source "$ROOT_DIR/scripts/lib/run-as-root.sh"
+
 if ! command -v flameshot >/dev/null 2>&1; then
-    sudo apt install -y flameshot
+    run_as_root apt install -y flameshot
 fi
 
 # Disable GNOME default "Save a screenshot to Pictures" shortcut

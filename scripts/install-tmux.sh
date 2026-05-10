@@ -2,12 +2,16 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+source "$ROOT_DIR/scripts/lib/run-as-root.sh"
 
 # Install tmux
 if ! command -v tmux &> /dev/null; then
     printf 'tmux not found. Installing...\n'
     if command -v apt-get &> /dev/null; then
-        sudo apt-get update && sudo apt-get install -y tmux
+        run_as_root apt-get update
+        run_as_root apt-get install -y tmux
     else
         printf 'ERROR: No supported package manager found. Please install tmux manually.\n'
         exit 1

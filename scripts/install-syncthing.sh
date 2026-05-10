@@ -2,10 +2,13 @@
 set -euo pipefail
 
 SYNC_DIR="${SYNCTHING_SYNC_DIR:-$HOME/Sync}"
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+
+source "$ROOT_DIR/scripts/lib/run-as-root.sh"
 
 if ! command -v syncthing >/dev/null 2>&1; then
-    sudo apt update
-    sudo apt install -y syncthing
+    run_as_root apt update
+    run_as_root apt install -y syncthing
 fi
 
 mkdir -p "$SYNC_DIR"

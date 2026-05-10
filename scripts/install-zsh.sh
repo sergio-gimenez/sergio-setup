@@ -6,15 +6,17 @@ ZSHRC_SOURCE="$ROOT_DIR/dotfiles/.zshrc"
 ZSHRC_TARGET="$HOME/.zshrc"
 ZSHRC_BACKUP="$HOME/.zshrc.backup.$(date +%Y%m%d%H%M%S)"
 
+source "$ROOT_DIR/scripts/lib/run-as-root.sh"
+
 if ! command -v zsh >/dev/null 2>&1; then
-    sudo apt install -y zsh
+    run_as_root apt install -y zsh
 fi
 
 if [ ! -d "$HOME/.oh-my-zsh" ]; then
     RUNZSH=no CHSH=no sh -c "$(curl -fsSL https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh)" "" --unattended
 fi
 
-sudo apt install -y fzf zsh-autosuggestions zsh-syntax-highlighting
+run_as_root apt install -y fzf zsh-autosuggestions zsh-syntax-highlighting
 
 AUTOSWITCH_DIR="${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/plugins/autoswitch_virtualenv"
 if [ ! -d "$AUTOSWITCH_DIR" ]; then

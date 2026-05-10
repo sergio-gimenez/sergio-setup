@@ -23,13 +23,13 @@ chmod +x "$HOME/.local/bin/toggle-gnome-dark-mode.sh"
 printf 'Installed dark-mode toggle script to ~/.local/bin/toggle-gnome-dark-mode.sh\n'
 
 # Add GNOME custom keybinding for dark-mode toggle
-CUSTOM_BINDING_PATH="/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4"
+CUSTOM_BINDING_PATH="/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5"
 CURRENT_BINDINGS=$(dconf read /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings 2>/dev/null || true)
 
 if [[ -z "$CURRENT_BINDINGS" ]] || [[ "$CURRENT_BINDINGS" == "@as []" ]]; then
-    dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings "['custom4/']"
-elif [[ "$CURRENT_BINDINGS" != *"custom4/"* ]]; then
-    NEW_BINDINGS="${CURRENT_BINDINGS%]}, 'custom4/']"
+    dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings "['custom5/']"
+elif [[ "$CURRENT_BINDINGS" != *"custom5/"* ]]; then
+    NEW_BINDINGS="${CURRENT_BINDINGS%]}, 'custom5/']"
     dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings "$NEW_BINDINGS"
 fi
 
