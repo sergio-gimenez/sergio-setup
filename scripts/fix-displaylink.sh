@@ -6,6 +6,11 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 
 source "$ROOT_DIR/scripts/lib/run-as-root.sh"
 
+if ! command -v dkms >/dev/null 2>&1 && ! systemctl list-unit-files 2>/dev/null | grep -Fq 'displaylink-driver.service'; then
+    printf 'Skipped DisplayLink fix. DisplayLink tooling not installed.\n'
+    exit 0
+fi
+
 # Ensure headers present for DKMS
 if ! dpkg -l | grep -q linux-headers-amd64; then
     run_as_root apt install -y linux-headers-amd64
