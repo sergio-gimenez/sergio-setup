@@ -31,9 +31,11 @@ printf 'Synced WM keybindings.\n'
 CUSTOM_LIST="['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/']"
 dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings "$CUSTOM_LIST"
 
-# custom0: Terminal
+# custom0: Terminal — prefer ghostty since install-ghostty.sh builds to ~/.local
 dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/name "'Terminal'"
-if command -v ghostty >/dev/null 2>&1; then
+if [ -x "$HOME/.local/bin/ghostty" ]; then
+    dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/command "'\$HOME/.local/bin/ghostty'"
+elif command -v ghostty >/dev/null 2>&1; then
     dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/command "'ghostty'"
 elif command -v gnome-terminal >/dev/null 2>&1; then
     dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/command "'gnome-terminal'"

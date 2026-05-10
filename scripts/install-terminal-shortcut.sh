@@ -6,13 +6,15 @@ ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
 
 source "$ROOT_DIR/scripts/lib/run-as-root.sh"
 
-# Find a terminal emulator
-if command -v gnome-terminal >/dev/null 2>&1; then
+# Find a terminal emulator — prefer ghostty since install-ghostty.sh builds to ~/.local
+if [ -x "$HOME/.local/bin/ghostty" ]; then
+    TERMINAL_CMD="$HOME/.local/bin/ghostty"
+elif command -v ghostty >/dev/null 2>&1; then
+    TERMINAL_CMD="$(command -v ghostty)"
+elif command -v gnome-terminal >/dev/null 2>&1; then
     TERMINAL_CMD="/usr/bin/gnome-terminal"
 elif command -v kgx >/dev/null 2>&1; then
     TERMINAL_CMD="/usr/bin/kgx"
-elif command -v ghostty >/dev/null 2>&1; then
-    TERMINAL_CMD="/usr/bin/ghostty"
 else
     printf 'No supported terminal emulator found. Skipping terminal shortcut.\n' >&2
     exit 0
