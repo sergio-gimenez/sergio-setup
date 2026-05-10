@@ -9,5 +9,10 @@ run_as_root() {
         return
     fi
 
+    if [ -n "${SUDO_PASSWORD:-}" ]; then
+        printf '%s\n' "$SUDO_PASSWORD" | sudo -S "$@"
+        return
+    fi
+
     sudo "$@"
 }
