@@ -18,6 +18,7 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 "$ROOT_DIR/scripts/install-caveman.sh"
 "$ROOT_DIR/scripts/install-ghostty-config.sh"
 "$ROOT_DIR/scripts/install-terminal-shortcut.sh"
+"$ROOT_DIR/scripts/sync-gnome-keybindings.sh"
 "$ROOT_DIR/scripts/fix-displaylink.sh"
 
 printf '\nSetup complete.\n'
