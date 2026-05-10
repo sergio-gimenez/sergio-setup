@@ -17,6 +17,18 @@ Personal workstation bootstrap scripts.
 
 ## Usage
 
+Source machine bootstrap for a new laptop:
+
+```bash
+make bootstrap-remote HOST=sergio-personal-laptop
+```
+
+Then SSH into laptop, copy or pull this repo there, and run:
+
+```bash
+./install.sh
+```
+
 Run the full setup:
 
 ```bash
@@ -45,6 +57,7 @@ Run individual parts:
 ./scripts/install-opencode.sh
 ./scripts/setup-remote-minimal.sh
 ./scripts/sync-ssh-to-remote.sh sergio-personal-laptop
+./scripts/sync-agents-to-remote.sh sergio-personal-laptop
 ```
 
 `install-headless.sh` installs headless remote dev tools only: `zsh`, `tmux`, LazyVim, OpenCode, `mosh`, and CLI dependencies. It skips GUI, desktop, and hardware-specific setup.
@@ -63,4 +76,6 @@ Run individual parts:
 - `install-logseq.sh` clones `ssh://git@git.home.sergiogimenez.com/sergio/logseq-graph.git` when `~/logseq-graph` is missing, fast-forward pulls when the checkout is clean, and then restores the managed config into `~/logseq-graph/.logseq/config`.
 - If the existing Logseq graph checkout has local changes, `install-logseq.sh` skips the pull and leaves your worktree untouched.
 - `scripts/sync-ssh-to-remote.sh` is a source-machine helper: it copies your local `~/.ssh` to a remote machine and fixes permissions so private Git remotes work before setup.
+- `scripts/sync-agents-to-remote.sh` is a source-machine helper: it copies your local `~/.agents` to a remote machine so Caveman skills and lockfiles exist before setup.
+- `make bootstrap-remote HOST=...` runs source-side bootstrap helpers for a new machine.
 - Set `SYNCTHING_SYNC_DIR`, `LOGSEQ_GRAPH_DIR`, or `LOGSEQ_GRAPH_REPO_URL` before running a script if you want different target paths or a different remote.
