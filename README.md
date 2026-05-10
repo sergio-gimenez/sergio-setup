@@ -44,6 +44,7 @@ Run individual parts:
 ./scripts/install-logseq.sh
 ./scripts/install-opencode.sh
 ./scripts/setup-remote-minimal.sh
+./scripts/sync-ssh-to-remote.sh sergio-personal-laptop
 ```
 
 `install-headless.sh` installs headless remote dev tools only: `zsh`, `tmux`, LazyVim, OpenCode, `mosh`, and CLI dependencies. It skips GUI, desktop, and hardware-specific setup.
@@ -61,4 +62,5 @@ Run individual parts:
 - `install-syncthing.sh` installs Syncthing, enables the `systemd --user` service, creates `~/Sync`, and prints the local device ID for phone pairing.
 - `install-logseq.sh` clones `ssh://git@git.home.sergiogimenez.com/sergio/logseq-graph.git` when `~/logseq-graph` is missing, fast-forward pulls when the checkout is clean, and then restores the managed config into `~/logseq-graph/.logseq/config`.
 - If the existing Logseq graph checkout has local changes, `install-logseq.sh` skips the pull and leaves your worktree untouched.
+- `scripts/sync-ssh-to-remote.sh` is a source-machine helper: it copies your local `~/.ssh` to a remote machine and fixes permissions so private Git remotes work before setup.
 - Set `SYNCTHING_SYNC_DIR`, `LOGSEQ_GRAPH_DIR`, or `LOGSEQ_GRAPH_REPO_URL` before running a script if you want different target paths or a different remote.
