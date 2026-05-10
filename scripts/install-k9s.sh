@@ -11,7 +11,26 @@ if ! command -v k9s &> /dev/null; then
     printf 'k9s not found. Installing...\n'
     if command -v apt-get &> /dev/null; then
         run_as_root apt-get update
-        run_as_root apt-get install -y k9s
+        if apt-cache show k9s >/dev/null 2>&1; then
+            run_as_root apt-get install -y k9s
+        else
+            TMP_DIR="$(mktemp -d)"
+            ARCH="$(dpkg --print-architecture)"
+
+            case "$ARCH" in
+                amd64) K9S_DEB_URL="https://github.com/derailed/k9s/releases/latest/download/k9s_linux_amd64.deb" ;;
+                arm64) K9S_DEB_URL="https://github.com/derailed/k9s/releases/latest/download/k9s_linux_arm64.deb" ;;
+                *)
+                    printf 'ERROR: Unsupported k9s architecture: %s\n' "$ARCH"
+                    rm -rf "$TMP_DIR"
+                    exit 1
+                    ;;
+            esac
+
+            curl -fsSL "$K9S_DEB_URL" -o "$TMP_DIR/k9s.deb"
+            run_as_root apt-get install -y "$TMP_DIR/k9s.deb"
+            rm -rf "$TMP_DIR"
+        fi
     else
         printf 'ERROR: No supported package manager found. Please install k9s manually.\n'
         exit 1
