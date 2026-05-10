@@ -24,4 +24,8 @@ if ! dconf dump "$GPASTE_KEYBINDING_PATH/" 2>/dev/null | grep -q 'Gpaste'; then
     dconf write "$GPASTE_KEYBINDING_PATH/binding" "'<Super>c'"
 fi
 
+if systemctl --user is-active org.gnome.GPaste.service >/dev/null 2>&1; then
+    systemctl --user restart org.gnome.GPaste.service
+fi
+
 printf 'Installed gpaste-2 with Super+C keybinding.\n'

@@ -19,4 +19,5 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 "$ROOT_DIR/scripts/install-ghostty-config.sh"
 "$ROOT_DIR/scripts/fix-displaylink.sh"
 
-printf 'Setup complete.\n'
+printf '\nSetup complete.\n'
+printf 'Log out and back in for all changes (shell, groups, keybindings) to take full effect.\n'

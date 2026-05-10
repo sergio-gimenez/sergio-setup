@@ -17,4 +17,9 @@ run_as_root cp "$CONFIG_SOURCE" "$CONFIG_TARGET"
 run_as_root systemctl enable --now keyd
 run_as_root keyd.rvaiya reload
 
+if getent group keyd >/dev/null 2>&1 && ! id -nG "$USER" | grep -qw keyd; then
+    run_as_root usermod -aG keyd "$USER"
+    printf 'Added %s to keyd group. Log out and back in for full access.\n' "$USER"
+fi
+
 printf 'Installed keyd config to %s\n' "$CONFIG_TARGET"
