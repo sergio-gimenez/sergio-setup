@@ -8,6 +8,10 @@ ZSHRC_BACKUP="$HOME/.zshrc.backup.$(date +%Y%m%d%H%M%S)"
 
 source "$ROOT_DIR/scripts/lib/run-as-root.sh"
 
+if ! command -v curl >/dev/null 2>&1; then
+    run_as_root apt install -y curl
+fi
+
 if ! command -v zsh >/dev/null 2>&1; then
     run_as_root apt install -y zsh
 fi
@@ -30,8 +34,11 @@ fi
 
 cp "$ZSHRC_SOURCE" "$ZSHRC_TARGET"
 
-if [ "$(basename "$SHELL")" != "zsh" ]; then
-    chsh -s "$(which zsh)"
+CURRENT_SHELL="$(getent passwd "$USER" | cut -d: -f7)"
+TARGET_SHELL="$(command -v zsh)"
+
+if [ "$CURRENT_SHELL" != "$TARGET_SHELL" ]; then
+    run_as_root chsh -s "$TARGET_SHELL" "$USER"
     printf 'Default shell changed to zsh. Please log out and back in for changes to take effect.\n'
 fi
 
