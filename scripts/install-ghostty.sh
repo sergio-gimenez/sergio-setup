@@ -29,7 +29,8 @@ if [ -z "$DEB_URL" ]; then
 fi
 
 DEB_VERSION="$(basename "$DEB_URL" | sed -E 's/^ghostty_([^_]+)_.*/\1/')"
-INSTALLED="$(dpkg-query -W -f='${Version}' ghostty 2>/dev/null || true)"
+# dpkg records the "0.ppa2" in the file name as "0~ppa2"; compare them the same way.
+INSTALLED="$(dpkg-query -W -f='${Version}' ghostty 2>/dev/null | tr '~' '.' || true)"
 
 if [ "$INSTALLED" = "$DEB_VERSION" ]; then
     printf 'Ghostty %s already installed.\n' "$INSTALLED"
