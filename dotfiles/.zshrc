@@ -109,11 +109,6 @@ alias k9s='k9s-themed'
 source /usr/share/zsh-autosuggestions/zsh-autosuggestions.zsh
 source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 
-# Global npm packages (codex, opencode-claude-memory) live under $HOME.
+# Global npm packages (codex, claude-mermaid) live under $HOME.
 export PATH="$HOME/.npm-global/bin:$PATH"
 
-# >>> opencode-memory auto-initialization >>>
-opencode() {
-  command opencode-memory "$@"
-}
-# <<< opencode-memory auto-initialization <<<

@@ -15,7 +15,7 @@ Personal workstation bootstrap scripts.
 - `zsh` with Oh-My-Zsh, `fzf`, `zsh-autosuggestions`, `zsh-syntax-highlighting`, and `autoswitch_virtualenv`
 - Ghostty from the `mkasberg/ghostty-ubuntu` .deb for the running Debian/Ubuntu release
 - Docker CE from Docker's apt repo, plus `lazydocker`
-- Agents: Node 24 from NodeSource when the system Node is older than 22, Claude Code (native installer), Codex and `opencode-claude-memory` (npm, prefix `~/.npm-global`), OpenCode, Claude plugins `caveman` and `claude-code-wakatime`, `~/.wakatime.cfg` pointing at Wakapi
+- Agents: Node 24 from NodeSource when the system Node is older than 22, Claude Code (native installer), Codex and `claude-mermaid` (npm, prefix `~/.npm-global`), OpenCode with the `opencode-claude-memory` v2 plugin in `opencode.json`, Claude plugins `caveman` and `claude-code-wakatime`, `~/.wakatime.cfg` pointing at Wakapi
 - Flatpaks listed in `flatpaks.txt`
 - Tactile GNOME extension with the config in `dotfiles/tactile/`
 - GNOME keybindings and desktop preferences (dark mode, clock, numlock, hot corners)

@@ -3,6 +3,7 @@
   "plugin": [
     "@mohak34/opencode-notifier@latest",
     "opencode-gemini-auth@latest",
-    "opencode-wakatime"
+    "opencode-wakatime",
+    "opencode-claude-memory"
   ]
 }

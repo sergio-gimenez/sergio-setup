@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Coding agents: Claude Code, Codex, the opencode memory plugin shared with Claude
-# Code, and WakaTime-compatible tracking against the self-hosted Wakapi.
-# OpenCode itself is install-opencode.sh.
+# Coding agents: Claude Code, Codex, and WakaTime-compatible tracking against the
+# self-hosted Wakapi. OpenCode is install-opencode.sh; its memory plugin shared with
+# Claude Code (opencode-claude-memory) is listed in dotfiles/opencode/opencode.json
+# and OpenCode fetches it itself.
 #
 #   WAKAPI_API_KEY=...   write ~/.wakatime.cfg without prompting
 
@@ -38,7 +39,7 @@ fi
 # Global npm packages go under $HOME, no root needed. .zshrc puts the bin dir on PATH.
 npm config set prefix "$NPM_PREFIX"
 export PATH="$NPM_PREFIX/bin:$HOME/.local/bin:$PATH"
-npm install -g @openai/codex opencode-claude-memory claude-mermaid
+npm install -g @openai/codex claude-mermaid
 
 if ! command -v claude >/dev/null 2>&1; then
     curl -fsSL https://claude.ai/install.sh | bash
