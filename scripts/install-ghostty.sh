@@ -1,44 +1,46 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-ROOT_DIR="$(cd "$SCRIPT_DIR/.." && pwd)"
-REPO_URL="https://github.com/ghostty-org/ghostty"
-TARGET_DIR="$HOME/.local/src/ghostty"
-ZIG_VERSION="0.15.2"
-ZIG_DIR="$HOME/.local/opt/zig-$ZIG_VERSION"
-ZIG_BIN="$ZIG_DIR/zig"
+# Ghostty isn't in the Debian archive. mkasberg/ghostty-ubuntu builds .debs for
+# Debian trixie/forky and recent Ubuntu (linked from Ghostty's own install docs).
+# Re-run this script to upgrade; there is no apt repo to pull updates from.
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+RELEASES_API="https://api.github.com/repos/mkasberg/ghostty-ubuntu/releases/latest"
 
 source "$ROOT_DIR/scripts/lib/run-as-root.sh"
 
-if ! command -v tar >/dev/null 2>&1; then
-    run_as_root apt install -y tar
+. /etc/os-release
+case "$ID" in
+    debian) TARGET="$VERSION_CODENAME" ;;
+    ubuntu) TARGET="$VERSION_ID" ;;
+    *) printf 'Skipped Ghostty. No package for %s.\n' "$ID" >&2; exit 0 ;;
+esac
+ARCH="$(dpkg --print-architecture)"
+
+RELEASE_JSON="$(curl -fsSL "$RELEASES_API")"
+DEB_URL="$(printf '%s' "$RELEASE_JSON" \
+    | grep -oE "\"browser_download_url\": *\"[^\"]*_${ARCH}_${TARGET}\.deb\"" \
+    | head -1 | sed -E 's/.*"(https[^"]+)"/\1/')"
+
+if [ -z "$DEB_URL" ]; then
+    printf 'Skipped Ghostty. Latest release has no %s build for %s.\n' "$ARCH" "$TARGET" >&2
+    exit 0
 fi
 
-if ! command -v xz >/dev/null 2>&1; then
-    run_as_root apt install -y xz-utils
+DEB_VERSION="$(basename "$DEB_URL" | sed -E 's/^ghostty_([^_]+)_.*/\1/')"
+INSTALLED="$(dpkg-query -W -f='${Version}' ghostty 2>/dev/null || true)"
+
+if [ "$INSTALLED" = "$DEB_VERSION" ]; then
+    printf 'Ghostty %s already installed.\n' "$INSTALLED"
+    exit 0
 fi
 
-run_as_root apt install -y libgtk-4-dev libgtk4-layer-shell-dev libadwaita-1-dev gettext libxml2-utils blueprint-compiler pkgconf gcc-multilib
+TMP_DIR="$(mktemp -d)"
+trap 'rm -rf "$TMP_DIR"' EXIT
+curl -fsSL "$DEB_URL" -o "$TMP_DIR/ghostty.deb"
+chmod 644 "$TMP_DIR/ghostty.deb"
+chmod 755 "$TMP_DIR"
+run_as_root apt-get install -y "$TMP_DIR/ghostty.deb"
 
-if [ ! -x "$ZIG_BIN" ]; then
-    mkdir -p "$(dirname "$ZIG_DIR")"
-    TMP_DIR="$(mktemp -d)"
-    curl -fsSL "https://ziglang.org/download/$ZIG_VERSION/zig-x86_64-linux-$ZIG_VERSION.tar.xz" -o "$TMP_DIR/zig.tar.xz"
-    tar -C "$TMP_DIR" -xf "$TMP_DIR/zig.tar.xz"
-    rm -rf "$ZIG_DIR"
-    mv "$TMP_DIR/zig-x86_64-linux-$ZIG_VERSION" "$ZIG_DIR"
-    rm -rf "$TMP_DIR"
-fi
-
-if [ -d "$TARGET_DIR/.git" ]; then
-    git -C "$TARGET_DIR" pull --ff-only
-else
-    mkdir -p "$(dirname "$TARGET_DIR")"
-    git clone "$REPO_URL" "$TARGET_DIR"
-fi
-
-cd "$TARGET_DIR"
-"$ZIG_BIN" build -p "$HOME/.local" -Doptimize=ReleaseFast -Dcpu=baseline
-
-printf 'Ghostty installed in %s and %s\n' "$TARGET_DIR" "$HOME/.local"
+printf 'Ghostty %s installed from %s\n' "$DEB_VERSION" "$DEB_URL"
