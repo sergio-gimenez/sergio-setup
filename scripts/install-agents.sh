@@ -1,0 +1,47 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+# Coding agents: Claude Code, Codex, the opencode memory plugin shared with Claude
+# Code, and WakaTime-compatible tracking against the self-hosted Wakapi.
+# OpenCode itself is install-opencode.sh.
+#
+#   WAKAPI_API_KEY=...   write ~/.wakatime.cfg without prompting
+
+ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+NPM_PREFIX="$HOME/.npm-global"
+WAKAPI_API_URL="https://wakapi.sergiogimenez.com/api/compat/wakatime/v1"
+
+source "$ROOT_DIR/scripts/lib/run-as-root.sh"
+
+run_as_root apt-get install -y nodejs npm
+
+# Global npm packages go under $HOME, no root needed. .zshrc puts the bin dir on PATH.
+npm config set prefix "$NPM_PREFIX"
+export PATH="$NPM_PREFIX/bin:$HOME/.local/bin:$PATH"
+npm install -g @openai/codex opencode-claude-memory claude-mermaid
+
+if ! command -v claude >/dev/null 2>&1; then
+    curl -fsSL https://claude.ai/install.sh | bash
+fi
+
+claude plugin marketplace add JuliusBrussee/caveman 2>/dev/null || true
+claude plugin marketplace add https://github.com/wakatime/claude-code-wakatime.git 2>/dev/null || true
+claude plugin install caveman@caveman 2>/dev/null || true
+claude plugin install claude-code-wakatime@wakatime 2>/dev/null || true
+
+if [ ! -f "$HOME/.wakatime.cfg" ]; then
+    key="${WAKAPI_API_KEY:-}"
+    if [ -z "$key" ] && [ -t 0 ]; then
+        read -r -s -p "Wakapi API key (empty to skip): " key
+        printf '\n'
+    fi
+    if [ -n "$key" ]; then
+        umask 077
+        printf '[settings]\napi_key = %s\napi_url = %s\n' "$key" "$WAKAPI_API_URL" > "$HOME/.wakatime.cfg"
+        printf 'Wrote ~/.wakatime.cfg pointing at Wakapi.\n'
+    else
+        printf 'Skipped ~/.wakatime.cfg. Set WAKAPI_API_KEY and re-run to add it.\n'
+    fi
+fi
+
+printf 'Agents installed. Codex WakaTime plugin still needs adding by hand in ~/.codex/config.toml.\n'

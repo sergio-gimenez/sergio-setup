@@ -22,8 +22,25 @@ gsettings set "$WM_SCHEMA" move-to-workspace-left "['<Shift><Control><Super>Left
 gsettings set "$WM_SCHEMA" move-to-workspace-right "['<Shift><Control><Super>Right']"
 gsettings set "$WM_SCHEMA" switch-to-workspace-left "['<Shift><Super>Tab']"
 gsettings set "$WM_SCHEMA" switch-to-workspace-right "['<Super>Tab']"
+gsettings set "$WM_SCHEMA" switch-to-workspace-2 "['<Super>2']"
 
 printf 'Synced WM keybindings.\n'
+
+# ── Disable app-launcher shortcuts that clash with workspace switching ─────────
+
+SHELL_SCHEMA="org.gnome.shell.keybindings"
+
+gsettings set "$SHELL_SCHEMA" switch-to-application-2 "@as []"
+
+printf 'Disabled app-launcher shortcuts.\n'
+
+# ── Screenshots: Print goes to Flameshot (custom1), GNOME's UI moves to Shift+Ctrl+End ──
+# GNOME 42+ keeps these in the shell schema; the old media-keys "screenshot" key is gone.
+
+gsettings set "$SHELL_SCHEMA" screenshot "@as []"
+gsettings set "$SHELL_SCHEMA" show-screenshot-ui "['<Shift><Control>End']"
+
+printf 'Synced screenshot keybindings.\n'
 
 # ── Custom media keybindings ─────────────────────────────────────────────────
 
@@ -45,7 +62,7 @@ fi
 dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/binding "'<Control><Alt>t'"
 
 # custom1: Flameshot screenshot
-dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/name "'Fameshot'"
+dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/name "'Flameshot'"
 dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/command "'sh -c -- \"QT_QPA_PLATFORM=wayland flameshot gui --clipboard --path \$HOME/Pictures/Screenshots\"'"
 dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/binding "'<Shift><Control>Home'"
 
@@ -66,8 +83,15 @@ dconf write /org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/cus
 
 printf 'Synced custom media keybindings.\n'
 
-# ── Disable default Print Screen so custom1/custom4 work cleanly ─────────────
+# ── Desktop preferences ──────────────────────────────────────────────────────
 
-dconf write /org/gnome/settings-daemon/plugins/media-keys/screenshot "''"
+gsettings set org.gnome.desktop.interface color-scheme "'prefer-dark'"
+gsettings set org.gnome.desktop.interface clock-show-seconds true
+gsettings set org.gnome.desktop.interface clock-show-weekday true
+gsettings set org.gnome.desktop.interface enable-hot-corners true
+gsettings set org.gnome.desktop.peripherals.keyboard numlock-state true
+gsettings set org.gnome.desktop.input-sources sources "[('xkb', 'es+cat')]"
+
+printf 'Synced desktop preferences.\n'
 
 printf 'GNOME keybindings synced. Log out and back in for full effect.\n'

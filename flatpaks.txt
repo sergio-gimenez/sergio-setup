@@ -1,0 +1,33 @@
+# One Flathub app id per line. Commented ones are on the work laptop but not
+# installed by default; uncomment to include.
+com.brave.Browser
+com.github.tchx84.Flatseal
+com.logseq.Logseq
+com.slack.Slack
+eu.betterbird.Betterbird
+org.localsend.localsend_app
+org.signal.Signal
+org.telegram.desktop
+org.videolan.VLC
+# ar.com.tuxguitar.TuxGuitar
+# com.calibre_ebook.calibre
+# com.getpostman.Postman
+# com.github.maoschanz.drawing
+# com.github.xournalpp.xournalpp
+# com.jgraph.drawio.desktop
+# com.mongodb.Compass
+# com.obsproject.Studio
+# com.protonvpn.www
+# io.github.electronstudio.WeylusCommunityEdition
+# io.github.giantpinkrobots.varia
+# net.mkiol.SpeechNote
+# org.audacityteam.Audacity
+# org.gimp.GIMP
+# org.gnome.Fractal
+# org.kde.kdenlive
+# org.onlyoffice.desktopeditors
+# org.openshot.OpenShot
+# org.qbittorrent.qBittorrent
+# org.torproject.torbrowser-launcher
+# rocks.koreader.KOReader
+# us.zoom.Zoom

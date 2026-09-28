@@ -4,16 +4,24 @@ Personal workstation bootstrap scripts.
 
 ## What it installs
 
-- `keyd` with `Caps Lock` remapped to `Escape` for all keyboards
-- Spanish (Catalan ·) keyboard layout via `localectl`
+- `keyd` with `Caps Lock` remapped to `Escape` for all keyboards, plus optional per-keyboard profiles in `keyd/profiles/`
+- Spanish (Catalan ·) keyboard layout via `localectl` and GNOME input sources
 - English user directories (`Desktop`, `Downloads`, etc.)
-- `gpaste-2` clipboard history manager with `Super+C` keybinding
-- `flameshot` with `Print Screen` keybinding (replaces GNOME default screenshot shortcut)
-- `zsh` with Oh-My-Zsh, `fzf`, `zsh-autosuggestions`, `zsh-syntax-highlighting`, and `autoswitch_virtualenv`
+- CLI tools: `ripgrep`, `fd`, `zoxide`, `btop`, `jq`, `lazygit`, `shellcheck`, `gh` (GitHub apt repo), `glab` (GitLab release .deb)
 - Neovim config from `https://github.com/sergio-gimenez/lazyvim-config`
-- Ghostty terminal emulator built from source
+- LaTeX: TeX Live, `latexmk`, `biber`, `chktex`, `zathura` (what the LazyVim `lang.tex` extra expects)
+- `gpaste-2` clipboard history manager with `Super+C` keybinding
+- `flameshot` bound to `Shift+Ctrl+Home`; GNOME's screenshot UI moved to `Shift+Ctrl+End`
+- `zsh` with Oh-My-Zsh, `fzf`, `zsh-autosuggestions`, `zsh-syntax-highlighting`, and `autoswitch_virtualenv`
+- Ghostty from the `mkasberg/ghostty-ubuntu` .deb for the running Debian/Ubuntu release
+- Docker CE from Docker's apt repo, plus `lazydocker`
+- Agents: Claude Code (native installer), Codex and `opencode-claude-memory` (npm, prefix `~/.npm-global`), OpenCode, Claude plugins `caveman` and `claude-code-wakatime`, `~/.wakatime.cfg` pointing at Wakapi
+- Flatpaks listed in `flatpaks.txt`
+- Tactile GNOME extension with the config in `dotfiles/tactile/`
+- GNOME keybindings and desktop preferences (dark mode, clock, numlock, hot corners)
 - Syncthing with the user service enabled and `~/Sync` created
 - Logseq graph cloned from Forgejo into `~/logseq-graph`, with managed shortcuts and plugin registry
+- With `--gaming`: Steam (Proton), MangoHud, GameMode, i386 Mesa, and `render`/`video` group membership
 
 ## Usage
 
@@ -35,6 +43,18 @@ Run the full setup:
 ./install.sh
 ```
 
+On a machine with a real GPU (the `desk` VM on gem12), add the gaming stack:
+
+```bash
+./install.sh --gaming
+```
+
+Prompts only appear on a TTY. For unattended runs, answer them with env vars:
+
+```bash
+KEYD_PROFILES=sino-wealth WAKAPI_API_KEY=... ./install.sh
+```
+
 Run headless remote setup:
 
 ```bash
@@ -45,6 +65,13 @@ Run individual parts:
 
 ```bash
 ./scripts/install-keyd.sh
+./scripts/install-cli-tools.sh
+./scripts/install-latex.sh
+./scripts/install-docker.sh
+./scripts/install-agents.sh
+./scripts/install-flatpaks.sh
+./scripts/install-tactile.sh
+./scripts/install-gaming.sh
 ./scripts/install-keyboard.sh
 ./scripts/install-user-dirs.sh
 ./scripts/install-lazyvim.sh
@@ -64,13 +91,16 @@ Run individual parts:
 
 ## Notes
 
-- `install-keyd.sh` uses `pkexec` because it needs root access.
+- Root steps use `pkexec` in a local desktop session and `sudo` over SSH (`SUDO_PASSWORD` for scripted runs).
 - `install-keyboard.sh` sets X11 keyboard to Spanish (Catalan ·) via `localectl`.
 - `install-user-dirs.sh` sets user directories to English names.
 - `install-lazyvim.sh` installs the config in `~/.config/nvim`.
 - `install-lazyvim.sh` installs `git` and `neovim` if they are missing.
 - If `~/.config/nvim` already exists and is not a git checkout, it is moved to a timestamped backup.
-- `install-flameshot.sh` disables GNOME's default Print Screen shortcut and binds it to `flameshot gui`.
+- `install-flameshot.sh` installs Flameshot; `sync-gnome-keybindings.sh` owns every GNOME shortcut, including the terminal on `Ctrl+Alt+T`.
+- `install-keyd.sh` asks per profile in `keyd/profiles/` (`KEYD_PROFILES=all|none|<names>` skips the question). A profile that names a device id replaces `default.conf` for that keyboard. `sino-wealth` swaps PageUp and End.
+- `install-ghostty.sh` has no apt repo to follow; re-run it to upgrade.
+- `install-agents.sh` never stores the Wakapi key in the repo: it reads `WAKAPI_API_KEY` or prompts. The Codex WakaTime plugin still needs adding by hand.
 - `install-zsh.sh` installs Oh-My-Zsh and plugins, copies the `.zshrc` from `dotfiles/.zshrc`, and changes the default shell to zsh.
 - `install-syncthing.sh` installs Syncthing, enables the `systemd --user` service, creates `~/Sync`, and prints the local device ID for phone pairing.
 - `install-logseq.sh` clones `ssh://git@git.home.sergiogimenez.com/sergio/logseq-graph.git` when `~/logseq-graph` is missing, fast-forward pulls when the checkout is clean, and then restores the managed config into `~/logseq-graph/.logseq/config`.
