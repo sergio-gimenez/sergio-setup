@@ -18,7 +18,10 @@ NODE_MAJOR=24
 
 # Debian 13 ships Node 20; puppeteer (pulled in by claude-mermaid) wants 22+.
 # NodeSource's nodejs bundles npm and conflicts with Debian's npm package.
-node_major() { node --version 2>/dev/null | sed -E 's/^v([0-9]+).*/\1/'; }
+node_major() {
+    command -v node >/dev/null 2>&1 || return 0
+    node --version | sed -E 's/^v([0-9]+).*/\1/'
+}
 current="$(node_major)"
 if [ -z "$current" ] || [ "$current" -lt "$NODE_MIN_MAJOR" ]; then
     run_as_root install -d -m 755 /etc/apt/keyrings
