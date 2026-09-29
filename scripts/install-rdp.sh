@@ -17,7 +17,20 @@ HANDOVER_DESKTOP="/usr/share/applications/org.gnome.RemoteDesktop.Handover.deskt
 
 source "$ROOT_DIR/scripts/lib/run-as-root.sh"
 
+# grdctl talks to the running daemon; show its errors but drop the TPM notice
+# it prints on every call inside a VM.
+grd() {
+    local out rc=0
+    out="$(run_as_root grdctl --system "$@" 2>&1)" || rc=$?
+    printf '%s\n' "$out" | grep -v 'TPM' >&2 || true
+    return "$rc"
+}
+
 run_as_root apt-get install -y gnome-remote-desktop openssl
+
+# Configure against a running daemon: with the service stopped, `rdp enable`
+# returns 0 and doesn't stick.
+run_as_root systemctl enable --now gnome-remote-desktop.service
 
 # Self-signed TLS pair owned by the daemon's user.
 if ! run_as_root test -f "$TLS_DIR/rdp-tls.crt"; then
@@ -26,9 +39,9 @@ if ! run_as_root test -f "$TLS_DIR/rdp-tls.crt"; then
         -subj "/CN=$(hostname -f 2>/dev/null || hostname)" \
         -keyout "$TLS_DIR/rdp-tls.key" -out "$TLS_DIR/rdp-tls.crt" 2>/dev/null
 fi
-run_as_root grdctl --system rdp set-tls-key "$TLS_DIR/rdp-tls.key" 2>/dev/null
-run_as_root grdctl --system rdp set-tls-cert "$TLS_DIR/rdp-tls.crt" 2>/dev/null
-run_as_root grdctl --system rdp enable 2>/dev/null
+grd rdp set-tls-key "$TLS_DIR/rdp-tls.key"
+grd rdp set-tls-cert "$TLS_DIR/rdp-tls.crt"
+grd rdp enable
 
 # Fix 1: the greeter session never starts the handover daemon, because Debian's
 # gnome-login.session doesn't list it. GDM also reads this autostart dir.
@@ -53,15 +66,19 @@ if { [ -z "$rdp_user" ] || [ -z "$rdp_password" ]; } && [ -t 0 ]; then
     [ -n "$rdp_password" ] || { read -r -s -p "RDP password: " rdp_password; printf '\n'; }
 fi
 if [ -n "$rdp_user" ] && [ -n "$rdp_password" ]; then
-    run_as_root grdctl --system rdp set-credentials "$rdp_user" "$rdp_password" 2>/dev/null
+    grd rdp set-credentials "$rdp_user" "$rdp_password"
 else
     printf 'RDP credentials not set. Re-run with RDP_USER and RDP_PASSWORD, or on a TTY.\n' >&2
 fi
 
 # Fix 3: without a TPM, credentials go to a GKeyFile the daemon only reads at
 # start, so a running daemon keeps saying "Credentials are not set".
-run_as_root systemctl enable gnome-remote-desktop.service
 run_as_root systemctl restart gnome-remote-desktop.service
+
+if ! run_as_root grdctl --system status 2>/dev/null | grep -qE 'Status: enabled'; then
+    printf 'RDP backend did not stay enabled; check `sudo grdctl --system status`.\n' >&2
+    exit 1
+fi
 
 if run_as_root passwd -S "$USER" 2>/dev/null | grep -qE "^$USER (L|NP) "; then
     printf 'Warning: %s has no usable password, the GDM greeter will refuse it. Run: sudo passwd %s\n' "$USER" "$USER" >&2
