@@ -92,6 +92,9 @@ gsettings set org.gnome.desktop.interface enable-hot-corners true
 gsettings set org.gnome.desktop.peripherals.keyboard numlock-state true
 gsettings set org.gnome.desktop.input-sources sources "[('xkb', 'es+cat')]"
 
+# Dock favourites. Entries whose .desktop file is missing are simply not shown.
+gsettings set org.gnome.shell favorite-apps "['com.brave.Browser.desktop', 'org.gnome.Nautilus.desktop', 'com.mitchellh.ghostty.desktop', 'com.logseq.Logseq.desktop', 'eu.betterbird.Betterbird.desktop', 'com.slack.Slack.desktop', 'org.gnome.Calendar.desktop']"
+
 printf 'Synced desktop preferences.\n'
 
 printf 'GNOME keybindings synced. Log out and back in for full effect.\n'
