@@ -4,6 +4,6 @@
     "@mohak34/opencode-notifier@latest",
     "opencode-gemini-auth@latest",
     "opencode-wakatime",
-    "opencode-claude-memory"
+    "opencode-claude-memory@2"
   ]
 }
