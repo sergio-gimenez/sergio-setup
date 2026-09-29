@@ -22,6 +22,7 @@ Personal workstation bootstrap scripts.
 - Syncthing with the user service enabled and `~/Sync` created
 - Logseq graph cloned from Forgejo into `~/logseq-graph`, with managed shortcuts and plugin registry
 - With `--gaming`: Steam (Proton), MangoHud, GameMode, i386 Mesa, and `render`/`video` group membership
+- With `--rdp` (optional): GNOME Remote Login over RDP on port 3389, one headless GNOME session per connection
 
 ## Usage
 
@@ -48,6 +49,17 @@ On a machine with a real GPU (the `desk` VM on gem12), add the gaming stack:
 ```bash
 ./install.sh --gaming
 ```
+
+Optional remote desktop (GNOME Remote Login over RDP):
+
+```bash
+./install.sh --rdp                                        # or on its own:
+RDP_USER=sergio RDP_PASSWORD=... ./scripts/install-rdp.sh
+```
+
+The account needs a real password for the GDM greeter (`sudo passwd $USER`;
+cloud images lock it). Connect with Remmina from Flathub, which `flatpaks.txt`
+installs. The Debian 1.4.39 package crashes on GNOME's server redirection.
 
 Prompts only appear on a TTY. For unattended runs, answer them with env vars:
 
@@ -100,6 +112,7 @@ Run individual parts:
 - `install-flameshot.sh` installs Flameshot; `sync-gnome-keybindings.sh` owns every GNOME shortcut, including the terminal on `Ctrl+Alt+T`.
 - `install-keyd.sh` asks per profile in `keyd/profiles/` (`KEYD_PROFILES=all|none|<names>` skips the question). A profile that names a device id replaces `default.conf` for that keyboard. `sino-wealth` swaps PageUp and End.
 - `install-ghostty.sh` has no apt repo to follow; re-run it to upgrade.
+- `install-rdp.sh` patches three gaps in Debian 13's GNOME Remote Login: the GDM greeter doesn't start the handover daemon (autostart added to `/usr/share/gdm/greeter/autostart/`), the user-session handover unit gets stopped as gnome-shell starts (replaced by an `/etc/xdg/autostart` entry), and the daemon only reads credentials at start (restarted after `set-credentials`). A blank Remmina window means a handover daemon is missing; check `journalctl -u gnome-remote-desktop`.
 - `install-agents.sh` never stores the Wakapi key in the repo: it reads `WAKAPI_API_KEY` or prompts. The Codex WakaTime plugin still needs adding by hand.
 - `install-zsh.sh` installs Oh-My-Zsh and plugins, copies the `.zshrc` from `dotfiles/.zshrc`, and changes the default shell to zsh.
 - `install-syncthing.sh` installs Syncthing, enables the `systemd --user` service, creates `~/Sync`, and prints the local device ID for phone pairing.

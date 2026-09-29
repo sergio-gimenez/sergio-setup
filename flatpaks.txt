@@ -6,6 +6,7 @@ com.logseq.Logseq
 com.slack.Slack
 eu.betterbird.Betterbird
 org.localsend.localsend_app
+org.remmina.Remmina
 org.signal.Signal
 org.telegram.desktop
 org.videolan.VLC

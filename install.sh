@@ -5,10 +5,13 @@ ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 # ./install.sh            full workstation setup
 # ./install.sh --gaming   also Steam/MangoHud (machines with a real GPU, e.g. desk)
+# ./install.sh --rdp      also GNOME Remote Login over RDP (see scripts/install-rdp.sh)
 GAMING=0
+RDP=0
 for arg in "$@"; do
     case "$arg" in
         --gaming) GAMING=1 ;;
+        --rdp) RDP=1 ;;
         *) printf 'Unknown option: %s\n' "$arg" >&2; exit 1 ;;
     esac
 done
@@ -40,6 +43,10 @@ done
 
 if [ "$GAMING" = 1 ]; then
     "$ROOT_DIR/scripts/install-gaming.sh"
+fi
+
+if [ "$RDP" = 1 ]; then
+    "$ROOT_DIR/scripts/install-rdp.sh"
 fi
 
 printf '\nSetup complete.\n'

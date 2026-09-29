@@ -6,7 +6,7 @@ source "$ROOT_DIR/scripts/lib/run-as-root.sh"
 
 run_as_root apt-get update -q
 run_as_root apt-get install -y \
-    ripgrep fd-find zoxide btop jq tree entr shellcheck lazygit \
+    ripgrep fd-find zoxide btop jq tree entr shellcheck lazygit mosh \
     curl wget gpg ca-certificates
 
 # Debian ships fd as fdfind to avoid a name clash.
