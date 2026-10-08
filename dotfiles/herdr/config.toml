@@ -48,3 +48,10 @@ resize_pane_left = "ctrl+shift+left"
 resize_pane_down = "ctrl+shift+down"
 resize_pane_up = "ctrl+shift+up"
 resize_pane_right = "ctrl+shift+right"
+
+# agb session picker in a new tab (plugin in dotfiles/herdr/plugins/agb)
+[[keys.command]]
+key = "prefix+a"
+type = "plugin_action"
+command = "sergio.agb.open"
+description = "agent sessions (agb)"

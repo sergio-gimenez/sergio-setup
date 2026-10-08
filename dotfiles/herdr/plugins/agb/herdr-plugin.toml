@@ -1,0 +1,52 @@
+# agb (AgentBridge) session picker as a herdr tab. agb itself knows nothing
+# about herdr: the picker runs in a plain pane and agb exec's the picked
+# claude/codex/opencode in place, so herdr detects the agent in that same pane.
+id = "sergio.agb"
+name = "agb"
+version = "0.1.0"
+min_herdr_version = "0.9.0"
+description = "Browse agent sessions with agb and resume one in a new tab"
+platforms = ["linux", "macos"]
+
+# zsh -lic so the agents agb exec's are on PATH exactly as in a normal shell
+# (opencode is only added in .zshrc on the laptop). `exec` means cancelling the
+# picker or quitting the agent closes the tab.
+[[panes]]
+id = "picker"
+title = "agb"
+placement = "tab"
+command = ["zsh", "-lic", "exec agb"]
+
+# Keybindings can only target actions, not panes, so this opens the pane.
+# --focus focuses the pane inside its tab but leaves the client on the old tab,
+# so switch to the new tab explicitly (tab_id from the open response).
+[[actions]]
+id = "open"
+title = "Browse agent sessions (agb)"
+contexts = ["workspace"]
+command = ["sh", "-c", """
+out=$("$HERDR_BIN_PATH" plugin pane open --plugin sergio.agb --entrypoint picker --focus) || exit
+tab=$(printf '%s' "$out" | sed -n 's/.*"tab_id":"\\([^"]*\\)".*/\\1/p')
+[ -n "$tab" ] && exec "$HERDR_BIN_PATH" tab focus "$tab"
+"""]
+
+# One Collie launcher button per recent session (a no-op where Collie isn't
+# configured). Refreshed when herdr starts, when an agent shows up in a pane
+# (that session is open now, so its button goes) and when a pane exits (it is
+# resumable again, now at the top).
+[[startup]]
+command = ["python3", "collie-launchers.py"]
+
+[[events]]
+on = "pane.agent_detected"
+command = ["python3", "collie-launchers.py"]
+
+[[events]]
+on = "pane.exited"
+command = ["python3", "collie-launchers.py"]
+
+[[actions]]
+id = "refresh-collie"
+title = "Refresh Collie session buttons"
+contexts = ["workspace"]
+command = ["python3", "collie-launchers.py"]
