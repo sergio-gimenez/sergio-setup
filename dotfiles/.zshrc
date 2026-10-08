@@ -112,3 +112,17 @@ source /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 # Global npm packages (codex, claude-mermaid) live under $HOME.
 export PATH="$HOME/.npm-global/bin:$PATH"
 
+# Separate Claude Code accounts. Each wrapper keeps its login and settings
+# isolated; agb (AgentBridge) knows them by these names. Adding one: see
+# docs/multiple-claude-accounts.md in agent-bridge.
+cc1() {
+  command claude "$@"
+}
+
+cc2() {
+  CLAUDE_CONFIG_DIR="$HOME/.claude-cc2" command claude "$@"
+}
+
+cc3() {
+  CLAUDE_CONFIG_DIR="$HOME/.claude-cc3" command claude "$@"
+}

@@ -52,7 +52,7 @@ claude plugin install claude-code-wakatime@wakatime 2>/dev/null || true
 
 # theme "auto" follows the terminal's light/dark (ctrl+alt+shift+d), also through herdr.
 # Edit in place: settings.json holds other per-machine state. cc1/cc2 are the account dirs.
-for dir in "$HOME/.claude" "$HOME/.claude-cc1" "$HOME/.claude-cc2"; do
+for dir in "$HOME/.claude" "$HOME/.claude-cc1" "$HOME/.claude-cc2" "$HOME/.claude-cc3"; do
     settings="$dir/settings.json"
     [ -d "$dir" ] || continue
     [ -s "$settings" ] || printf '{}\n' > "$settings"

@@ -31,6 +31,7 @@ done
 "$ROOT_DIR/scripts/install-docker.sh"
 "$ROOT_DIR/scripts/install-opencode.sh"
 "$ROOT_DIR/scripts/install-agents.sh"
+"$ROOT_DIR/scripts/install-agb-memory.sh"
 "$ROOT_DIR/scripts/install-syncthing.sh"
 "$ROOT_DIR/scripts/install-logseq.sh"
 "$ROOT_DIR/scripts/install-difi.sh"
