@@ -1,0 +1,361 @@
+{
+  "$schema": "https://opencode.ai/theme.json",
+  "defs": {
+    "moon_bg": "#222436",
+    "moon_bg_dark": "#1e2030",
+    "moon_bg_dark1": "#191B29",
+    "moon_bg_float": "#1e2030",
+    "moon_bg_highlight": "#2f334d",
+    "moon_bg_popup": "#1e2030",
+    "moon_bg_search": "#3e68d7",
+    "moon_bg_sidebar": "#1e2030",
+    "moon_bg_statusline": "#1e2030",
+    "moon_bg_visual": "#2d3f76",
+    "moon_black": "#1b1d2b",
+    "moon_blue": "#82aaff",
+    "moon_blue0": "#3e68d7",
+    "moon_blue1": "#65bcff",
+    "moon_blue2": "#0db9d7",
+    "moon_blue5": "#89ddff",
+    "moon_blue6": "#b4f9f8",
+    "moon_blue7": "#394b70",
+    "moon_border": "#1b1d2b",
+    "moon_border_highlight": "#589ed7",
+    "moon_comment": "#636da6",
+    "moon_cyan": "#86e1fc",
+    "moon_dark3": "#545c7e",
+    "moon_dark5": "#737aa2",
+    "moon_diff_add": "#2a4556",
+    "moon_diff_change": "#252a3f",
+    "moon_diff_delete": "#4b2a3d",
+    "moon_diff_text": "#394b70",
+    "moon_error": "#c53b53",
+    "moon_fg": "#c8d3f5",
+    "moon_fg_dark": "#828bb8",
+    "moon_fg_float": "#c8d3f5",
+    "moon_fg_gutter": "#3b4261",
+    "moon_fg_sidebar": "#828bb8",
+    "moon_git_add": "#b8db87",
+    "moon_git_change": "#7ca1f2",
+    "moon_git_delete": "#e26a75",
+    "moon_git_ignore": "#545c7e",
+    "moon_green": "#c3e88d",
+    "moon_green1": "#4fd6be",
+    "moon_green2": "#41a6b5",
+    "moon_hint": "#4fd6be",
+    "moon_info": "#0db9d7",
+    "moon_magenta": "#c099ff",
+    "moon_magenta2": "#ff007c",
+    "moon_orange": "#ff966c",
+    "moon_purple": "#fca7ea",
+    "moon_rainbow_1": "#82aaff",
+    "moon_rainbow_2": "#ffc777",
+    "moon_rainbow_3": "#c3e88d",
+    "moon_rainbow_4": "#4fd6be",
+    "moon_rainbow_5": "#c099ff",
+    "moon_rainbow_6": "#fca7ea",
+    "moon_rainbow_7": "#ff966c",
+    "moon_rainbow_8": "#ff757f",
+    "moon_red": "#ff757f",
+    "moon_red1": "#c53b53",
+    "moon_teal": "#4fd6be",
+    "moon_terminal_black": "#444a73",
+    "moon_terminal_black_bright": "#444a73",
+    "moon_terminal_blue": "#82aaff",
+    "moon_terminal_blue_bright": "#9ab8ff",
+    "moon_terminal_cyan": "#86e1fc",
+    "moon_terminal_cyan_bright": "#b2ebff",
+    "moon_terminal_green": "#c3e88d",
+    "moon_terminal_green_bright": "#c7fb6d",
+    "moon_terminal_magenta": "#c099ff",
+    "moon_terminal_magenta_bright": "#caabff",
+    "moon_terminal_red": "#ff757f",
+    "moon_terminal_red_bright": "#ff8d94",
+    "moon_terminal_white": "#828bb8",
+    "moon_terminal_white_bright": "#c8d3f5",
+    "moon_terminal_yellow": "#ffc777",
+    "moon_terminal_yellow_bright": "#ffd8ab",
+    "moon_todo": "#82aaff",
+    "moon_warning": "#ffc777",
+    "moon_yellow": "#ffc777",
+    "day_bg": "#e1e2e7",
+    "day_bg_dark": "#d0d5e3",
+    "day_bg_dark1": "#c1c9df",
+    "day_bg_float": "#d0d5e3",
+    "day_bg_highlight": "#c4c8da",
+    "day_bg_popup": "#d0d5e3",
+    "day_bg_search": "#7890dd",
+    "day_bg_sidebar": "#d0d5e3",
+    "day_bg_statusline": "#d0d5e3",
+    "day_bg_visual": "#b7c1e3",
+    "day_black": "#b4b5b9",
+    "day_blue": "#2e7de9",
+    "day_blue0": "#7890dd",
+    "day_blue1": "#188092",
+    "day_blue2": "#07879d",
+    "day_blue5": "#006a83",
+    "day_blue6": "#2e5857",
+    "day_blue7": "#92a6d5",
+    "day_border": "#b4b5b9",
+    "day_border_highlight": "#4094a3",
+    "day_comment": "#848cb5",
+    "day_cyan": "#007197",
+    "day_dark3": "#8990b3",
+    "day_dark5": "#68709a",
+    "day_diff_add": "#b7ced5",
+    "day_diff_change": "#d5d9e4",
+    "day_diff_delete": "#dababe",
+    "day_diff_text": "#92a6d5",
+    "day_error": "#c64343",
+    "day_fg": "#3760bf",
+    "day_fg_dark": "#6172b0",
+    "day_fg_float": "#3760bf",
+    "day_fg_gutter": "#a8aecb",
+    "day_fg_sidebar": "#6172b0",
+    "day_git_add": "#4197a4",
+    "day_git_change": "#506d9c",
+    "day_git_delete": "#c47981",
+    "day_git_ignore": "#8990b3",
+    "day_green": "#587539",
+    "day_green1": "#387068",
+    "day_green2": "#38919f",
+    "day_hint": "#118c74",
+    "day_info": "#07879d",
+    "day_magenta": "#9854f1",
+    "day_magenta2": "#d20065",
+    "day_orange": "#b15c00",
+    "day_purple": "#7847bd",
+    "day_rainbow_1": "#2e7de9",
+    "day_rainbow_2": "#8c6c3e",
+    "day_rainbow_3": "#587539",
+    "day_rainbow_4": "#118c74",
+    "day_rainbow_5": "#9854f1",
+    "day_rainbow_6": "#7847bd",
+    "day_rainbow_7": "#b15c00",
+    "day_rainbow_8": "#f52a65",
+    "day_red": "#f52a65",
+    "day_red1": "#c64343",
+    "day_teal": "#118c74",
+    "day_terminal_black": "#a1a6c5",
+    "day_terminal_black_bright": "#a1a6c5",
+    "day_terminal_blue": "#2e7de9",
+    "day_terminal_blue_bright": "#358aff",
+    "day_terminal_cyan": "#007197",
+    "day_terminal_cyan_bright": "#007ea8",
+    "day_terminal_green": "#587539",
+    "day_terminal_green_bright": "#5c8524",
+    "day_terminal_magenta": "#9854f1",
+    "day_terminal_magenta_bright": "#a463ff",
+    "day_terminal_red": "#f52a65",
+    "day_terminal_red_bright": "#ff4774",
+    "day_terminal_white": "#6172b0",
+    "day_terminal_white_bright": "#3760bf",
+    "day_terminal_yellow": "#8c6c3e",
+    "day_terminal_yellow_bright": "#a27629",
+    "day_todo": "#2e7de9",
+    "day_warning": "#8c6c3e",
+    "day_yellow": "#8c6c3e"
+  },
+  "theme": {
+    "primary": {
+      "dark": "moon_blue",
+      "light": "day_blue"
+    },
+    "secondary": {
+      "dark": "moon_purple",
+      "light": "day_purple"
+    },
+    "accent": {
+      "dark": "moon_orange",
+      "light": "day_orange"
+    },
+    "error": {
+      "dark": "moon_red1",
+      "light": "day_red1"
+    },
+    "warning": {
+      "dark": "moon_yellow",
+      "light": "day_yellow"
+    },
+    "success": {
+      "dark": "moon_green",
+      "light": "day_green"
+    },
+    "info": {
+      "dark": "moon_blue2",
+      "light": "day_blue2"
+    },
+    "text": {
+      "dark": "moon_fg",
+      "light": "day_fg"
+    },
+    "textMuted": {
+      "dark": "moon_fg_dark",
+      "light": "day_fg_dark"
+    },
+    "background": {
+      "dark": "moon_bg",
+      "light": "day_bg"
+    },
+    "backgroundPanel": {
+      "dark": "moon_bg_dark",
+      "light": "day_bg_dark"
+    },
+    "backgroundElement": {
+      "dark": "moon_bg_highlight",
+      "light": "day_bg_highlight"
+    },
+    "border": {
+      "dark": "moon_black",
+      "light": "day_black"
+    },
+    "borderActive": {
+      "dark": "moon_border_highlight",
+      "light": "day_border_highlight"
+    },
+    "borderSubtle": {
+      "dark": "moon_dark3",
+      "light": "day_dark3"
+    },
+    "diffAdded": {
+      "dark": "moon_green1",
+      "light": "day_green1"
+    },
+    "diffRemoved": {
+      "dark": "moon_red1",
+      "light": "day_red1"
+    },
+    "diffContext": {
+      "dark": "moon_fg_dark",
+      "light": "day_fg_dark"
+    },
+    "diffHunkHeader": {
+      "dark": "moon_comment",
+      "light": "day_comment"
+    },
+    "diffHighlightAdded": {
+      "dark": "moon_git_add",
+      "light": "day_git_add"
+    },
+    "diffHighlightRemoved": {
+      "dark": "moon_git_delete",
+      "light": "day_git_delete"
+    },
+    "diffAddedBg": {
+      "dark": "moon_diff_add",
+      "light": "day_diff_add"
+    },
+    "diffRemovedBg": {
+      "dark": "moon_diff_delete",
+      "light": "day_diff_delete"
+    },
+    "diffContextBg": {
+      "dark": "moon_bg_highlight",
+      "light": "day_bg_highlight"
+    },
+    "diffLineNumber": {
+      "dark": "moon_fg_gutter",
+      "light": "day_fg_gutter"
+    },
+    "diffAddedLineNumberBg": {
+      "dark": "moon_diff_add",
+      "light": "day_diff_add"
+    },
+    "diffRemovedLineNumberBg": {
+      "dark": "moon_diff_delete",
+      "light": "day_diff_delete"
+    },
+    "markdownText": {
+      "dark": "moon_fg",
+      "light": "day_fg"
+    },
+    "markdownHeading": {
+      "dark": "moon_blue",
+      "light": "day_blue"
+    },
+    "markdownLink": {
+      "dark": "moon_blue",
+      "light": "day_blue"
+    },
+    "markdownLinkText": {
+      "dark": "moon_teal",
+      "light": "day_teal"
+    },
+    "markdownCode": {
+      "dark": "moon_green",
+      "light": "day_green"
+    },
+    "markdownBlockQuote": {
+      "dark": "moon_comment",
+      "light": "day_comment"
+    },
+    "markdownEmph": {
+      "dark": "moon_fg",
+      "light": "day_fg"
+    },
+    "markdownStrong": {
+      "dark": "moon_fg",
+      "light": "day_fg"
+    },
+    "markdownHorizontalRule": {
+      "dark": "moon_fg_gutter",
+      "light": "day_fg_gutter"
+    },
+    "markdownListItem": {
+      "dark": "moon_blue5",
+      "light": "day_blue5"
+    },
+    "markdownListEnumeration": {
+      "dark": "moon_orange",
+      "light": "day_orange"
+    },
+    "markdownImage": {
+      "dark": "moon_blue",
+      "light": "day_blue"
+    },
+    "markdownImageText": {
+      "dark": "moon_teal",
+      "light": "day_teal"
+    },
+    "markdownCodeBlock": {
+      "dark": "moon_fg",
+      "light": "day_fg"
+    },
+    "syntaxComment": {
+      "dark": "moon_comment",
+      "light": "day_comment"
+    },
+    "syntaxKeyword": {
+      "dark": "moon_purple",
+      "light": "day_purple"
+    },
+    "syntaxFunction": {
+      "dark": "moon_blue",
+      "light": "day_blue"
+    },
+    "syntaxVariable": {
+      "dark": "moon_fg",
+      "light": "day_fg"
+    },
+    "syntaxString": {
+      "dark": "moon_green",
+      "light": "day_green"
+    },
+    "syntaxNumber": {
+      "dark": "moon_orange",
+      "light": "day_orange"
+    },
+    "syntaxType": {
+      "dark": "moon_blue1",
+      "light": "day_blue1"
+    },
+    "syntaxOperator": {
+      "dark": "moon_blue5",
+      "light": "day_blue5"
+    },
+    "syntaxPunctuation": {
+      "dark": "moon_fg_dark",
+      "light": "day_fg_dark"
+    }
+  }
+}

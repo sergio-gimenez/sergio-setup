@@ -1,23 +1,30 @@
-# Remap Ctrl+Tab and Ctrl+Shift+Tab to switch between splits (panes)
-keybind = ctrl+tab=goto_split:next
-keybind = ctrl+shift+tab=goto_split:previous
+# Remap Ctrl+Tab and Ctrl+Shift+Tab to switch between splits (panes).
+# performable: = only consumed when Ghostty has a split to move to; otherwise the
+# key falls through to the app, so herdr can use the same chord for its own panes.
+keybind = performable:ctrl+tab=goto_split:next
+keybind = performable:ctrl+shift+tab=goto_split:previous
+keybind = performable:ctrl+alt+left=goto_split:left
+keybind = performable:ctrl+alt+right=goto_split:right
+keybind = performable:ctrl+alt+up=goto_split:up
+keybind = performable:ctrl+alt+down=goto_split:down
 
 # Remap Ctrl+PageUp and Ctrl+PageDown to cycle between tabs
 keybind = ctrl+page_up=previous_tab
 keybind = ctrl+page_down=next_tab
 
 # Resize split
-keybind = ctrl+shift+left=resize_split:left,10
-keybind = ctrl+shift+down=resize_split:down,10
-keybind = ctrl+shift+up=resize_split:up,10
-keybind = ctrl+shift+right=resize_split:right,10
+keybind = performable:ctrl+shift+left=resize_split:left,10
+keybind = performable:ctrl+shift+down=resize_split:down,10
+keybind = performable:ctrl+shift+up=resize_split:up,10
+keybind = performable:ctrl+shift+right=resize_split:right,10
 keybind = ctrl+shift+plus=equalize_splits
 keybind = ctrl+shift+x=toggle_split_zoom
 keybind = ctrl+shift+,=reload_config
 
-# Auto-switch theme based on GNOME light/dark mode
-# Using tokyonight variants to match LazyVim's default aesthetic.
-theme = light:TokyoNight Day,dark:TokyoNight Night
+# Auto-switch theme based on GNOME light/dark mode.
+# Same palette as Neovim (LazyVim default: tokyonight moon / day). The theme files
+# in ./themes are copied from tokyonight.nvim's extras so the colors match exactly.
+theme = light:tokyonight-nvim-day,dark:tokyonight-nvim-moon
 
 font-family = "JetBrainsMono Nerd Font"
 font-size = 11

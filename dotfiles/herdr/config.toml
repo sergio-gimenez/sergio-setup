@@ -1,0 +1,50 @@
+onboarding = false
+
+[theme]
+name = "tokyo-night"
+# Follow Ghostty's light/dark (GNOME color-scheme, ctrl+alt+shift+d)
+auto_switch = true
+dark_name = "tokyo-night"
+light_name = "tokyo-night-day"
+
+# Neovim (LazyVim) uses tokyonight "moon" for dark, herdr ships "night".
+# Recolor the dark variant to moon (values from tokyonight.nvim colors/moon.lua).
+# herdr's tokyo-night-day already equals tokyonight.nvim "day", so no light overrides.
+[theme.custom.dark]
+accent = "#82aaff"
+panel_bg = "#222436"
+active_row_bg = "#2f334d"
+selection_bg = "#2d3f76"
+surface0 = "#2f334d"
+surface1 = "#444a73"
+surface_dim = "#222436"
+overlay0 = "#636da6"
+overlay1 = "#737aa2"
+text = "#c8d3f5"
+subtext0 = "#828bb8"
+mauve = "#c099ff"
+green = "#c3e88d"
+yellow = "#ffc777"
+red = "#ff757f"
+blue = "#82aaff"
+teal = "#86e1fc"
+peach = "#ff966c"
+
+# Mirror Ghostty's chords. Ghostty owns ctrl+shift+e/o (its own splits), so
+# herdr gets them behind the prefix. The direct chords (ctrl+tab, ctrl+alt+arrows,
+# ctrl+shift+arrows) reach herdr only when Ghostty has no split to act on: Ghostty
+# binds them as `performable:`. herdr cannot bind PageUp/PageDown, so tab cycling
+# stays on prefix+n / prefix+p.
+[keys]
+split_horizontal = ["prefix+minus", "prefix+shift+e"]   # pane below, like ctrl+shift+e
+split_vertical = ["prefix+v", "prefix+shift+o"]         # pane right, like ctrl+shift+o
+cycle_pane_next = ["prefix+tab", "ctrl+tab"]
+cycle_pane_previous = ["prefix+shift+tab", "ctrl+shift+tab"]
+focus_pane_left = ["prefix+h", "ctrl+alt+left"]
+focus_pane_down = ["prefix+j", "ctrl+alt+down"]
+focus_pane_up = ["prefix+k", "ctrl+alt+up"]
+focus_pane_right = ["prefix+l", "ctrl+alt+right"]
+resize_pane_left = "ctrl+shift+left"
+resize_pane_down = "ctrl+shift+down"
+resize_pane_up = "ctrl+shift+up"
+resize_pane_right = "ctrl+shift+right"

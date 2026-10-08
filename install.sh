@@ -37,6 +37,7 @@ done
 "$ROOT_DIR/scripts/install-caveman.sh"
 "$ROOT_DIR/scripts/install-flatpaks.sh"
 "$ROOT_DIR/scripts/install-ghostty-config.sh"
+"$ROOT_DIR/scripts/install-herdr-config.sh"
 "$ROOT_DIR/scripts/install-tactile.sh"
 "$ROOT_DIR/scripts/sync-gnome-keybindings.sh"
 "$ROOT_DIR/scripts/fix-displaylink.sh"

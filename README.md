@@ -13,9 +13,10 @@ Personal workstation bootstrap scripts.
 - `gpaste-2` clipboard history manager with `Super+C` keybinding
 - `flameshot` bound to `Shift+Ctrl+Home`; GNOME's screenshot UI moved to `Shift+Ctrl+End`
 - `zsh` with Oh-My-Zsh, `fzf`, `zsh-autosuggestions`, `zsh-syntax-highlighting`, and `autoswitch_virtualenv`
-- Ghostty from the `mkasberg/ghostty-ubuntu` .deb for the running Debian/Ubuntu release
+- Ghostty from the `mkasberg/ghostty-ubuntu` .deb for the running Debian/Ubuntu release, with the Neovim theme (`dotfiles/ghostty/themes/tokyonight-nvim-{moon,day}`, following GNOME light/dark)
+- herdr config in `dotfiles/herdr/` (tokyonight moon/day like Neovim, auto light/dark switch, Ghostty-style keys: `prefix+E`/`prefix+O` split down/right, `ctrl+tab`, `ctrl+alt+arrows`, `ctrl+shift+arrows` when Ghostty has no split); herdr itself is not installed here
 - Docker CE from Docker's apt repo, plus `lazydocker`
-- Agents: Node 24 from NodeSource when the system Node is older than 22, Claude Code (native installer), Codex and `claude-mermaid` (npm, prefix `~/.npm-global`), OpenCode with the `opencode-claude-memory` v2 plugin in `opencode.json`, Claude plugins `caveman` and `claude-code-wakatime`, `~/.wakatime.cfg` pointing at Wakapi
+- Agents: Node 24 from NodeSource when the system Node is older than 22, Claude Code (native installer), Codex and `claude-mermaid` (npm, prefix `~/.npm-global`), OpenCode with the `opencode-claude-memory` v2 plugin in `opencode.json` and the `tokyonight-nvim` theme (moon/day) in `cli.json`, Claude plugins `caveman` and `claude-code-wakatime`, `~/.wakatime.cfg` pointing at Wakapi, Claude Code `theme: auto` in `~/.claude*/settings.json`
 - Flatpaks listed in `flatpaks.txt`
 - Tactile GNOME extension with the config in `dotfiles/tactile/`
 - GNOME keybindings and desktop preferences (dark mode, clock, numlock, hot corners)

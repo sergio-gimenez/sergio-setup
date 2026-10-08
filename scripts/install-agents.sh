@@ -50,6 +50,16 @@ claude plugin marketplace add https://github.com/wakatime/claude-code-wakatime.g
 claude plugin install caveman@caveman 2>/dev/null || true
 claude plugin install claude-code-wakatime@wakatime 2>/dev/null || true
 
+# theme "auto" follows the terminal's light/dark (ctrl+alt+shift+d), also through herdr.
+# Edit in place: settings.json holds other per-machine state. cc1/cc2 are the account dirs.
+for dir in "$HOME/.claude" "$HOME/.claude-cc1" "$HOME/.claude-cc2"; do
+    settings="$dir/settings.json"
+    [ -d "$dir" ] || continue
+    [ -s "$settings" ] || printf '{}\n' > "$settings"
+    tmp="$(mktemp)"
+    jq '.theme = "auto"' "$settings" > "$tmp" && mv "$tmp" "$settings"
+done
+
 if [ ! -f "$HOME/.wakatime.cfg" ]; then
     key="${WAKAPI_API_KEY:-}"
     if [ -z "$key" ] && [ -t 0 ]; then
