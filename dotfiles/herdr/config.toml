@@ -32,7 +32,7 @@ peach = "#ff966c"
 
 # Mirror Ghostty's chords. Ghostty owns ctrl+shift+e/o (its own splits), so
 # herdr gets them behind the prefix: ctrl held, b then e / o (also shift+e / shift+o).
-# The direct chords (ctrl+tab, ctrl+alt+arrows, ctrl+shift+arrows) reach herdr
+# The direct chords (ctrl+tab, ctrl+alt+arrows) reach herdr
 # only when Ghostty has no split to act on: Ghostty binds them as `performable:`.
 # herdr cannot bind PageUp/PageDown, so tab cycling stays on prefix+n / prefix+p.
 [keys]
@@ -44,10 +44,8 @@ focus_pane_left = ["prefix+h", "ctrl+alt+left"]
 focus_pane_down = ["prefix+j", "ctrl+alt+down"]
 focus_pane_up = ["prefix+k", "ctrl+alt+up"]
 focus_pane_right = ["prefix+l", "ctrl+alt+right"]
-resize_pane_left = "ctrl+shift+left"
-resize_pane_down = "ctrl+shift+down"
-resize_pane_up = "ctrl+shift+up"
-resize_pane_right = "ctrl+shift+right"
+# Resize: herdr default resize mode (prefix+r, then arrows/hjkl). ctrl+shift+arrows
+# stay with Ghostty, whose resize_split swallows them even without a split.
 
 # agb session picker in a new tab (plugin in dotfiles/herdr/plugins/agb)
 [[keys.command]]
