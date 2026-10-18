@@ -11,12 +11,35 @@ if [ "$current" = "'prefer-dark'" ]; then
     echo "Switched to light mode"
     NEW_K9S_SKIN="tokyonight-day"
     SCHEME_REPORT=$'\e[?997;2n'
+    REPORT_MODE=2
 else
     gsettings set org.gnome.desktop.interface color-scheme prefer-dark
     echo "Switched to dark mode"
     NEW_K9S_SKIN="tokyonight-night"
     SCHEME_REPORT=$'\e[?997;1n'
+    REPORT_MODE=1
 fi
+
+# The same Claude auto-theme race occurs in SSH-attached Herdr sessions on
+# desk. Repeat the report there after the terminal has propagated its palette.
+# Keep this in workstation setup: neither agb nor Herdr needs host-specific code.
+(
+    sleep 1.2
+    ssh -o BatchMode=yes -o ConnectTimeout=3 desk "bash -s -- $REPORT_MODE" <<'REMOTE'
+mode=$1
+case "$mode" in 1|2) ;; *) exit 1 ;; esac
+herdr_bin=$(command -v herdr || printf '%s/.local/bin/herdr' "$HOME")
+report=$(printf '\033[?997;%sn' "$mode")
+"$herdr_bin" pane list 2>/dev/null | python3 -c '
+import json, sys
+for pane in json.load(sys.stdin)["result"]["panes"]:
+    if pane.get("agent") == "claude":
+        print(pane["pane_id"])
+' 2>/dev/null | while read -r pane; do
+    "$herdr_bin" pane send-text "$pane" "$report" >/dev/null 2>&1
+done
+REMOTE
+) >/dev/null 2>&1 &
 
 # Update k9s skin if config exists
 if [ -f "$K9S_CONFIG" ]; then
