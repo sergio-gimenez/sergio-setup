@@ -1,12 +1,18 @@
 #!/usr/bin/env python3
-"""Keep one Collie launcher row per recent agb session.
+"""Keep Collie launchers for recent sessions and explicit running-session
+handoffs. Each handoff names both the source session and target account, so a
+phone never needs the terminal picker or an inferred neighbouring pane.
 
 Collie's launchers.toml is the allowlist for its Launch buttons, so tapping a
 session on the phone runs exactly `exec agb open <id>` and nothing else. This
 rewrites only the block between the markers below; any rows outside it are
 left alone. No Collie config dir on this machine (the laptop) means no-op.
 
-Env: COLLIE_CONFIG_DIR (default ~/.config/collie), AGB_COLLIE_ROWS (default 8).
+Rows carry only `command` and `label`, the keys stock Collie reads, so Collie
+updates from upstream without a local patch. The label alone has to say what a
+row does: Collie lists every row flat, and flags a `--yolo` one "No prompts".
+
+Env: COLLIE_CONFIG_DIR (default ~/.config/collie), AGB_COLLIE_ROWS (default 5).
 """
 
 import json
@@ -21,6 +27,7 @@ END = "# <<< agb sessions <<<"
 # The id ends up in a shell line Collie types; never let anything else through.
 SAFE_ID = re.compile(r"^[A-Za-z0-9._-]+$")
 TITLE_MAX = 48
+DEFAULT_ROWS = 5
 
 
 def agb_binary():
@@ -29,8 +36,8 @@ def agb_binary():
     return shutil.which("agb") or os.path.expanduser("~/.local/bin/agb")
 
 
-def sessions_in_panes():
-    """Session ids herdr has seen in a live pane. agb can only tell an open
+def agent_panes():
+    """Live pane metadata. agb can only tell an open
     session from a command line or an open file, so a fresh OpenCode session
     (its store is a database) shows up here and nowhere else."""
     herdr = os.environ.get("HERDR_BIN_PATH") or shutil.which("herdr") or os.path.expanduser("~/.local/bin/herdr")
@@ -38,18 +45,44 @@ def sessions_in_panes():
         out = subprocess.run([herdr, "pane", "list"], capture_output=True, text=True, timeout=10, check=True)
         panes = json.loads(out.stdout)["result"]["panes"]
     except (OSError, subprocess.SubprocessError, ValueError, KeyError):
-        return set()
-    return {(p.get("agent_session") or {}).get("value") for p in panes} - {None}
+        return []
+    return panes
 
 
-def recent_sessions(limit):
+def listed_sessions():
     out = subprocess.run([agb_binary(), "--print", "--json"], capture_output=True, text=True, timeout=60, check=True)
-    sessions = sorted(json.loads(out.stdout), key=lambda s: s.get("updatedAtMs", 0), reverse=True)
+    return sorted(json.loads(out.stdout), key=lambda s: s.get("updatedAtMs", 0), reverse=True)
+
+
+def recent_sessions(limit, sessions, panes):
     # A session open in some pane already has its own card in Collie, and a
     # second resume of it would fight the first.
-    open_here = sessions_in_panes()
+    open_here = {(pane.get("agent_session") or {}).get("value") for pane in panes} - {None}
     return [s for s in sessions
             if not s.get("openPid") and s.get("id") not in open_here and SAFE_ID.match(s.get("id", ""))][:limit]
+
+
+def running_sessions(sessions, panes):
+    """Only identified conversations get handoff buttons. Pane metadata wins
+    over process detection for its display title; the ID always comes from agb."""
+    by_id = {session["id"]: session for session in sessions}
+    running = {}
+    for pane in panes:
+        session_id = (pane.get("agent_session") or {}).get("value")
+        session = by_id.get(session_id)
+        if session and pane.get("agent"):
+            entry = dict(session)
+            entry["title"] = pane.get("terminal_title_stripped") or pane.get("title") or session.get("title")
+            running[session_id] = entry
+    for session in sessions:
+        if session.get("openPid") and session["id"] not in running:
+            running[session["id"]] = session
+    return [session for session in running.values() if SAFE_ID.match(session.get("id", ""))]
+
+
+def shorten(title):
+    title = " ".join(title.split())
+    return title[: TITLE_MAX - 1] + "…" if len(title) > TITLE_MAX else title
 
 
 def label(session):
@@ -57,23 +90,65 @@ def label(session):
     # An OpenCode session whose first turn failed has no title: its first
     # prompt says more than an id prefix several sessions share.
     prompts = session.get("prompts") or []
-    title = " ".join((session.get("title") or (prompts[0] if prompts else "")).split()) or "untitled " + session["id"][-6:]
-    if len(title) > TITLE_MAX:
-        title = title[: TITLE_MAX - 1] + "…"
+    title = shorten(session.get("title") or (prompts[0] if prompts else "")) or "untitled " + session["id"][-6:]
     directory = session.get("directory", "")
     home = os.path.expanduser("~")
     project = "~" if directory.rstrip("/") == home else os.path.basename(directory.rstrip("/"))
     return f"{account} · {title} · {project}"
 
 
-def block(sessions):
-    lines = [BEGIN]
-    for session in sessions:
-        # json.dumps is a valid TOML basic string: same quoting and escapes.
+def agb_targets():
+    """Get AgentBridge's public target/limit report. AgentBridge owns provider
+    probing and recommendation; this plugin only presents the result."""
+    try:
+        out = subprocess.run([agb_binary(), "limits", "--json"], capture_output=True, text=True, timeout=20, check=True)
+        accounts = json.loads(out.stdout)["accounts"]
+        targets = [account for account in accounts if SAFE_ID.match(account.get("target", ""))]
+        return sorted(targets, key=lambda account: not account.get("recommended", False))
+    except (OSError, subprocess.SubprocessError, ValueError, KeyError, TypeError):
+        return []
+
+
+def target_label(target):
+    name = target["target"].upper()
+    if target.get("recommended"):
+        prefix = "★"
+    else:
+        prefix = "→"
+    if target.get("status") == "blocked":
+        return f"{prefix} {name} · blocked"
+    remaining = target.get("remainingPercent")
+    if isinstance(remaining, (int, float)):
+        return f"{prefix} {name} · {remaining:.0f}% free"
+    return f"{prefix} {name}"
+
+
+def add_launcher(lines, command, description):
+    # Both commands are exact Collie allowlist entries. The phone only chooses
+    # a row; it never appends flags to a command sent to the bridge.
+    for flag, suffix in (("--safe", ""), ("--yolo", " · YOLO")):
         lines += ["[[launchers]]",
-                  f"command = {json.dumps('exec agb open ' + session['id'])}",
-                  f"label = {json.dumps(label(session), ensure_ascii=False)}",
+                  f"command = {json.dumps(command + ' ' + flag)}",
+                  f"label = {json.dumps(description + suffix, ensure_ascii=False)}",
                   ""]
+
+
+def block(sessions, targets, running=()):
+    lines = [BEGIN]
+    # Source IDs are explicit allowlisted commands, equally usable from the
+    # dashboard and a pane switcher, including Spaces with multiple agents.
+    for session in running:
+        own = (session.get("account") or {"claude": "cc", "codex": "cx", "opencode": "oc"}.get(session["source"], "")).lower()
+        title = shorten(session.get("title") or "Conversation")
+        for target in targets:
+            name = target["target"]
+            if name == own:
+                continue
+            command = f"exec agb open {session['id']} --target {name}"
+            destination = target_label(target).removeprefix("→ ")
+            add_launcher(lines, command, f"{own.upper()} → {destination} · {title}")
+    for session in sessions:
+        add_launcher(lines, 'exec agb open ' + session['id'], label(session))
     if lines[-1] == "":
         lines.pop()
     lines.append(END)
@@ -81,6 +156,11 @@ def block(sessions):
 
 
 def splice(existing, generated):
+    # This old bootstrap entry launches a TUI that the touch mirror cannot
+    # operate. Preserve every other operator-defined launcher.
+    existing = re.sub(
+        r'\[\[launchers\]\]\ncommand = "exec agb"\nlabel = "Agent sessions"\n',
+        "", existing)
     start, end = existing.find(BEGIN), existing.find(END)
     if start >= 0 and end > start:
         return existing[:start] + generated + existing[end + len(END):].lstrip("\n")
@@ -99,7 +179,10 @@ def main():
     except FileNotFoundError:
         existing = ""
 
-    updated = splice(existing, block(recent_sessions(int(os.environ.get("AGB_COLLIE_ROWS", "8")))))
+    sessions, panes = listed_sessions(), agent_panes()
+    updated = splice(existing, block(
+        recent_sessions(int(os.environ.get("AGB_COLLIE_ROWS", DEFAULT_ROWS)), sessions, panes),
+        agb_targets(), running_sessions(sessions, panes)))
     if updated == existing:
         return 0
     temporary = f"{path}.tmp-{os.getpid()}"
